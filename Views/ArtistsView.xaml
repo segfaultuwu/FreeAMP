@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="FreeAMP.Views.ArtistsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:FreeAMP.Resources">
+
+    <Grid>
+        <TextBlock Text="{x:Static res:Strings.Artists}"
+                   FontSize="28"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+    </Grid>
+</UserControl>

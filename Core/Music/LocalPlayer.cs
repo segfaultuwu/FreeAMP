@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Versioning;
 using NAudio.Wave;
 
 namespace FreeAMP.Core.Music
 {
+    [SupportedOSPlatform("windows")]
     public class LocalPlayer : IDisposable
     {
-        private AudioFileReader? _audioFile;
+        private WaveStream? _waveStream;
         private WaveOutEvent? _outputDevice;
 
         public bool IsPlaying =>
@@ -16,41 +18,59 @@ namespace FreeAMP.Core.Music
 
         public float Volume
         {
-            get => _audioFile?.Volume ?? 1.0f;
+            get => _outputDevice?.Volume ?? _volume;
             set
             {
-                if (_audioFile != null)
-                    _audioFile.Volume = Math.Clamp(value, 0f, 1f);
+                _volume = Math.Clamp(value, 0f, 1f);
+                if (_outputDevice != null)
+                    _outputDevice.Volume = _volume;
             }
         }
+        private float _volume = 1.0f;
 
         public TimeSpan Position
         {
-            get => _audioFile?.CurrentTime ?? TimeSpan.Zero;
+            get => _waveStream?.CurrentTime ?? TimeSpan.Zero;
             set
             {
-                if (_audioFile != null)
-                    _audioFile.CurrentTime = value;
+                if (_waveStream != null)
+                    _waveStream.CurrentTime = value;
             }
         }
 
         public TimeSpan Duration =>
-            _audioFile?.TotalTime ?? TimeSpan.Zero;
+            _waveStream?.TotalTime ?? TimeSpan.Zero;
 
-        public void Play(string path)
+        public void Play(string source)
         {
-            if (!File.Exists(path))
-                return;
-
             Stop();
 
-            _audioFile = new AudioFileReader(path);
+            try
+            {
+                if (Uri.TryCreate(source, UriKind.Absolute, out Uri? uriResult)
+                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+                {
+                    _waveStream = new MediaFoundationReader(source);
+                }
+                else
+                {
+                    if (!File.Exists(source))
+                        return;
+                    _waveStream = new AudioFileReader(source);
+                }
 
-            _outputDevice = new WaveOutEvent();
-            _outputDevice.Init(_audioFile);
-            _outputDevice.Play();
+                _outputDevice = new WaveOutEvent();
+                _outputDevice.Init(_waveStream);
+                _outputDevice.Volume = Volume;
+                _outputDevice.Play();
 
-            CurrentFile = path;
+                CurrentFile = source;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error playing source: {ex.Message}");
+                Stop();
+            }
         }
 
         public void Pause()
@@ -78,10 +98,10 @@ namespace FreeAMP.Core.Music
         {
             _outputDevice?.Stop();
 
-            _audioFile?.Dispose();
+            _waveStream?.Dispose();
             _outputDevice?.Dispose();
 
-            _audioFile = null;
+            _waveStream = null;
             _outputDevice = null;
 
             CurrentFile = null;
@@ -89,10 +109,10 @@ namespace FreeAMP.Core.Music
 
         public void Seek(double seconds)
         {
-            if (_audioFile == null)
+            if (_waveStream == null)
                 return;
 
-            _audioFile.CurrentTime = TimeSpan.FromSeconds(seconds);
+            _waveStream.CurrentTime = TimeSpan.FromSeconds(seconds);
         }
 
         public void Dispose()

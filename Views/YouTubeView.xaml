@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="FreeAMP.Views.YouTubeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:res="clr-namespace:FreeAMP.Resources">
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER / SEARCH -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="{x:Static res:Strings.YouTubeSearch}"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           Margin="0,0,0,8"/>
+
+                <ui:TextBox x:Name="YoutubeSearchTextBox"
+                            Height="40"
+                            PlaceholderText="{x:Static res:Strings.SearchPlaceholder}"
+                            Icon="Search24"
+                            KeyDown="YoutubeSearchTextBox_KeyDown"/>
+            </StackPanel>
+
+            <ui:Button Grid.Column="1"
+                       Content="{x:Static res:Strings.Search}"
+                       Icon="Search24"
+                       Appearance="Primary"
+                       Padding="24,0"
+                       Height="40"
+                       VerticalAlignment="Bottom"
+                       Margin="12,0,0,0"
+                       Click="YoutubeSearchButton_Click"/>
+        </Grid>
+
+        <!-- RESULTS -->
+        <ListView x:Name="YoutubeResultsListView"
+                  Grid.Row="1"
+                  SelectionChanged="YoutubeResultsListView_SelectionChanged"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Padding="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border x:Name="Container"
+                                        Background="{TemplateBinding Background}"
+                                        CornerRadius="8"
+                                        Padding="12,8">
+                                    <ContentPresenter/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Container" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Container" Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="48"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ui:SymbolIcon Symbol="MusicNote24"
+                                      FontSize="24"
+                                      Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                      VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" Margin="12,0">
+                            <TextBlock Text="{Binding Title}"
+                                       FontSize="15"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding Author}"
+                                       FontSize="13"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <ui:SymbolIcon Grid.Column="2"
+                                      Symbol="Play24"
+                                      FontSize="18"
+                                      Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                      VerticalAlignment="Center"
+                                      Margin="8,0"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

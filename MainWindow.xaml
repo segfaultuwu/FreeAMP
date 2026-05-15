@@ -4,22 +4,23 @@
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  xmlns:res="clr-namespace:FreeAMP.Resources"
                  Title="{x:Static res:Strings.AppName}"
-                 Height="720"
-                 Width="1180"
-                 MinHeight="620"
-                 MinWidth="940"
+                 Width="1280"
+                 Height="760"
+                 MinWidth="980"
+                 MinHeight="640"
                  WindowStartupLocation="CenterScreen"
-                 Background="#0B0B0F"
+                 Background="Transparent"
                  WindowBackdropType="Mica"
                  WindowCornerPreference="Round"
                  ExtendsContentIntoTitleBar="True">
 
     <ui:FluentWindow.Resources>
+
         <SolidColorBrush x:Key="Bg" Color="#0B0B0F"/>
         <SolidColorBrush x:Key="Panel" Color="#15151C"/>
         <SolidColorBrush x:Key="Panel2" Color="#1B1B24"/>
         <SolidColorBrush x:Key="Border" Color="#2A2A36"/>
-        <SolidColorBrush x:Key="Text" Color="#F3F3F7"/>
+        <SolidColorBrush x:Key="Text" Color="#F5F5FA"/>
         <SolidColorBrush x:Key="Muted" Color="#9A9AA6"/>
         <SolidColorBrush x:Key="Accent" Color="#7C5CFF"/>
 
@@ -29,83 +30,21 @@
             <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="12">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
 
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="{StaticResource Panel2}"/>
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CaretBrush" Value="White"/>
-            <Setter Property="Padding" Value="14,8"/>
-        </Style>
-
-        <Style TargetType="ListView">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
-        </Style>
-
-        <Style TargetType="GridViewColumnHeader">
-            <Setter Property="Background" Value="#20202A"/>
-            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
-
-        <Style TargetType="ListViewItem">
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <Border x:Name="Row"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="10"
-                                Padding="8">
-                            <GridViewRowPresenter
-                                VerticalAlignment="Center"
-                                Content="{TemplateBinding Content}"
-                                Columns="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=View.Columns}"/>
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Row" Property="Background" Value="#20202A"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Row" Property="Background" Value="#2B2448"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </ui:FluentWindow.Resources>
 
     <Grid Background="#660B0B0F">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="130"/>
         </Grid.RowDefinitions>
+
+        <!-- TITLEBAR -->
 
         <ui:TitleBar Grid.Row="0"
                      Title="FreeAMP"
@@ -113,23 +52,32 @@
                      ShowMaximize="True"
                      ShowClose="True"/>
 
-        <Grid Grid.Row="1" Margin="14">
+        <!-- CONTENT -->
+
+        <Grid Grid.Row="1"
+              Margin="16">
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260"/>
-                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <!-- SIDEBAR -->
+
             <Border Grid.Column="0"
                     Background="{StaticResource Panel}"
-                    CornerRadius="18"
+                    CornerRadius="24"
                     BorderBrush="{StaticResource Border}"
                     BorderThickness="1">
 
-                <DockPanel Margin="16">
-                    <StackPanel DockPanel.Dock="Top" Margin="0,4,0,28">
+                <DockPanel Margin="18">
+
+                    <StackPanel DockPanel.Dock="Top"
+                                Margin="0,4,0,32">
+
                         <TextBlock Text="{x:Static res:Strings.AppName}"
-                                   FontSize="28"
+                                   FontSize="30"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource Text}"/>
 
@@ -139,242 +87,176 @@
                     </StackPanel>
 
                     <StackPanel>
-                        <Button x:Name="LibraryButton"
-                                Content="{x:Static res:Strings.Library}"
-                                Height="44"
-                                Margin="0,0,0,10"
-                                Background="{StaticResource Accent}"/>
 
-                        <Button x:Name="PlaylistsButton"
-                                Content="{x:Static res:Strings.Playlists}"
-                                Height="44"
-                                Margin="0,0,0,10"/>
+                        <Button Content="{x:Static res:Strings.Library}"
+                                Height="48"
+                                Margin="0,0,0,12"
+                                Background="{StaticResource Accent}"
+                                Click="LibraryButton_Click"/>
 
-                        <Button x:Name="AlbumsButton"
-                                Content="{x:Static res:Strings.Albums}"
-                                Height="44"
-                                Margin="0,0,0,10"/>
+                        <Button Content="{x:Static res:Strings.Playlists}"
+                                Height="48"
+                                Margin="0,0,0,12"
+                                Click="PlaylistsButton_Click"/>
 
-                        <Button x:Name="ArtistsButton"
-                                Content="{x:Static res:Strings.Artists}"
-                                Height="44"
-                                Margin="0,0,0,10"/>
+                        <Button Content="{x:Static res:Strings.Albums}"
+                                Height="48"
+                                Margin="0,0,0,12"
+                                Click="AlbumsButton_Click"/>
 
-                        <Button x:Name="SettingsButton"
-                                Content="{x:Static res:Strings.Settings}"
-                                Height="44"
+                        <Button Content="{x:Static res:Strings.Artists}"
+                                Height="48"
+                                Margin="0,0,0,12"
+                                Click="ArtistsButton_Click"/>
+
+                        <Button Content="YouTube"
+                                Height="48"
+                                Margin="0,0,0,12"
+                                Click="YoutubeButton_Click"/>
+
+                        <Button Content="{x:Static res:Strings.Settings}"
+                                Height="48"
                                 Click="SettingsButton_Click"/>
                     </StackPanel>
                 </DockPanel>
             </Border>
 
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="72"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="112"/>
-                </Grid.RowDefinitions>
+            <!-- VIEW HOST -->
 
-                <Border Grid.Row="0"
-                        Background="{StaticResource Panel}"
-                        CornerRadius="18"
-                        BorderBrush="{StaticResource Border}"
-                        BorderThickness="1">
-                    <Grid Margin="22,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="300"/>
-                        </Grid.ColumnDefinitions>
+            <Border Grid.Column="2"
+                    Background="{StaticResource Panel}"
+                    CornerRadius="24"
+                    BorderBrush="{StaticResource Border}"
+                    BorderThickness="1"
+                    Padding="14">
 
-                        <TextBlock Text="{x:Static res:Strings.MusicLibrary}"
-                                   VerticalAlignment="Center"
-                                   FontSize="26"
+                <ContentControl x:Name="MainContent"/>
+            </Border>
+        </Grid>
+
+        <!-- PLAYER -->
+
+        <Border Grid.Row="2"
+                Margin="16,0,16,16"
+                Background="{StaticResource Panel}"
+                CornerRadius="24"
+                BorderBrush="{StaticResource Border}"
+                BorderThickness="1">
+
+            <Grid Margin="22,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="360"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="240"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- NOW PLAYING -->
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+
+                    <Border Width="74"
+                            Height="74"
+                            CornerRadius="18"
+                            Background="{StaticResource Panel2}"/>
+
+                    <StackPanel Margin="16,0,0,0"
+                                VerticalAlignment="Center">
+
+                        <TextBlock x:Name="NowPlayingTitleText"
+                                   Text="{x:Static res:Strings.NoTrackSelected}"
+                                   FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource Text}"/>
 
-                        <TextBox x:Name="SearchTextBox"
-                                 Grid.Column="1"
-                                 Height="40"
-                                 VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
-
-                <Border Grid.Row="2"
-                        Background="{StaticResource Panel}"
-                        CornerRadius="18"
-                        BorderBrush="{StaticResource Border}"
-                        BorderThickness="1"
-                        Padding="12">
-
-                    <ListView x:Name="TracksListView"
-                              SelectionChanged="TracksListView_SelectionChanged">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="#" Width="50" DisplayMemberBinding="{Binding Number}"/>
-                                <GridViewColumn Header="{x:Static res:Strings.TitleColumn}" Width="360" DisplayMemberBinding="{Binding Title}"/>
-                                <GridViewColumn Header="{x:Static res:Strings.ArtistColumn}" Width="220" DisplayMemberBinding="{Binding Artist}"/>
-                                <GridViewColumn Header="{x:Static res:Strings.AlbumColumn}" Width="220" DisplayMemberBinding="{Binding Album}"/>
-                                <GridViewColumn Header="{x:Static res:Strings.DurationColumn}" Width="100" DisplayMemberBinding="{Binding Duration}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Border>
-
-                <Border Grid.Row="4"
-                        Background="{StaticResource Panel}"
-                        CornerRadius="18"
-                        BorderBrush="{StaticResource Border}"
-                        BorderThickness="1">
-
-                    <Grid Margin="18,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="320"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="240"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border x:Name="AlbumArtBox"
-                                    Width="68"
-                                    Height="68"
-                                    CornerRadius="14"
-                                    Background="{StaticResource Panel2}"/>
-
-                            <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
-                                <TextBlock x:Name="NowPlayingTitleText"
-                                           Text="{x:Static res:Strings.NoTrackSelected}"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource Text}"/>
-
-                                <TextBlock x:Name="NowPlayingArtistText"
-                                           Text="{x:Static res:Strings.UnknownArtist}"
-                                           Margin="0,4,0,0"
-                                           Foreground="{StaticResource Muted}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button x:Name="PreviousButton" Content="⏮" Width="46" Height="46" Margin="4"/>
-                                <Button x:Name="PlayPauseButton"
-                                    Content="▶"
-                                    Width="58"
-                                    Height="58"
-                                    Margin="4"
-                                    Background="{StaticResource Accent}"
-                                    Click="PlayPauseButton_Click"/>
-                                <Button x:Name="NextButton" Content="⏭" Width="46" Height="46" Margin="4"/>
-                            </StackPanel>
-
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="48"/>
-                                    <ColumnDefinition Width="420"/>
-                                    <ColumnDefinition Width="48"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock x:Name="CurrentTimeText" Text="0:00" Foreground="{StaticResource Muted}"/>
-                                <Slider x:Name="ProgressSlider"
-                                    Grid.Column="1"
-                                    Minimum="0"
-                                    Maximum="100"
-                                    Value="0"
-                                    PreviewMouseUp="ProgressSlider_PreviewMouseUp"/>
-                                <TextBlock x:Name="DurationText" Grid.Column="2" Text="0:00" Foreground="{StaticResource Muted}" TextAlignment="Right"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2"
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center">
-
-                            <TextBlock Text="{x:Static res:Strings.Volume}"
-                                       Margin="0,0,12,0"
-                                       VerticalAlignment="Center"
-                                       Foreground="{StaticResource Muted}"/>
-
-                            <Slider x:Name="VolumeSlider"
-                                Width="120"
-                                Minimum="0"
-                                Maximum="100"
-                                Value="70"
-                                ValueChanged="VolumeSlider_ValueChanged"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </Grid>
-        </Grid>
-
-        <Grid x:Name="SettingsOverlay"
-              Grid.RowSpan="2"
-              Visibility="Collapsed"
-              Background="#AA000000">
-
-            <Border Width="520"
-                    Padding="24"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="{StaticResource Panel}"
-                    BorderBrush="{StaticResource Border}"
-                    BorderThickness="1"
-                    CornerRadius="18">
-
-                <StackPanel>
-                    <DockPanel Margin="0,0,0,20">
-                        <TextBlock Text="{x:Static res:Strings.Settings}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource Text}"/>
-
-                        <Button x:Name="CloseSettingsButton"
-                                DockPanel.Dock="Right"
-                                Content="✕"
-                                Width="38"
-                                Height="38"
-                                Click="CloseSettingsButton_Click"/>
-                    </DockPanel>
-
-                    <TextBlock Text="Language" Foreground="{StaticResource Muted}" Margin="0,0,0,6"/>
-
-                    <ComboBox x:Name="LanguageComboBox" Height="38" Margin="0,0,0,18">
-                        <ComboBoxItem Content="English" Tag="en"/>
-                        <ComboBoxItem Content="Polski" Tag="pl"/>
-                    </ComboBox>
-
-                    <TextBlock Text="Music folder" Foreground="{StaticResource Muted}" Margin="0,0,0,6"/>
-
-                    <DockPanel Margin="0,0,0,18">
-                        <TextBox x:Name="MusicFolderTextBox" Height="38" Width="380"/>
-                        <Button x:Name="BrowseMusicFolderButton" Content="Browse" Height="38" Width="90" Margin="10,0,0,0"/>
-                    </DockPanel>
-
-                    <CheckBox x:Name="ScanOnStartupCheckBox"
-                              Content="Scan music on startup"
-                              Foreground="{StaticResource Text}"
-                              Margin="0,0,0,18"/>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Cancel"
-                                Width="100"
-                                Height="40"
-                                Margin="0,0,10,0"
-                                Click="CloseSettingsButton_Click"/>
-
-                        <Button x:Name="SaveSettingsButton"
-                                Content="Save"
-                                Width="100"
-                                Height="40"
-                                Background="{StaticResource Accent}"/>
+                        <TextBlock x:Name="NowPlayingArtistText"
+                                   Text="{x:Static res:Strings.UnknownArtist}"
+                                   Margin="0,6,0,0"
+                                   Foreground="{StaticResource Muted}"/>
                     </StackPanel>
                 </StackPanel>
-            </Border>
-        </Grid>
+
+                <!-- CONTROLS -->
+
+                <StackPanel Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+
+                        <Button x:Name="PreviousButton"
+                                Content="⏮"
+                                Width="52"
+                                Height="52"
+                                Margin="5"/>
+
+                        <Button x:Name="PlayPauseButton"
+                                Content="▶"
+                                Width="64"
+                                Height="64"
+                                Margin="5"
+                                FontSize="18"
+                                Background="{StaticResource Accent}"
+                                Click="PlayPauseButton_Click"/>
+
+                        <Button x:Name="NextButton"
+                                Content="⏭"
+                                Width="52"
+                                Height="52"
+                                Margin="5"/>
+                    </StackPanel>
+
+                    <Grid Margin="0,12,0,0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="52"/>
+                            <ColumnDefinition Width="460"/>
+                            <ColumnDefinition Width="52"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock x:Name="CurrentTimeText"
+                                   Text="0:00"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Muted}"/>
+
+                        <Slider x:Name="ProgressSlider"
+                                Grid.Column="1"
+                                Minimum="0"
+                                Maximum="100"
+                                Value="0"
+                                PreviewMouseUp="ProgressSlider_PreviewMouseUp"/>
+
+                        <TextBlock x:Name="DurationText"
+                                   Grid.Column="2"
+                                   Text="0:00"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Right"
+                                   Foreground="{StaticResource Muted}"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- VOLUME -->
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="{x:Static res:Strings.Volume}"
+                               Margin="0,0,14,0"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource Muted}"/>
+
+                    <Slider x:Name="VolumeSlider"
+                            Width="130"
+                            Minimum="0"
+                            Maximum="100"
+                            Value="70"
+                            ValueChanged="VolumeSlider_ValueChanged"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </ui:FluentWindow>

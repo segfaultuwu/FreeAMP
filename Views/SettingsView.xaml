@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="FreeAMP.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:FreeAMP.Resources">
+
+    <StackPanel Margin="20">
+
+        <TextBlock Text="{x:Static res:Strings.Settings}"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <TextBlock Text="{x:Static res:Strings.MusicFolder}"/>
+
+        <TextBox Height="40"
+                 Margin="0,6,0,20"/>
+
+        <Button Content="{x:Static res:Strings.Save}"
+                Width="120"
+                Height="40"/>
+    </StackPanel>
+</UserControl>

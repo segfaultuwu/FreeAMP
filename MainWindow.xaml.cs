@@ -1,6 +1,9 @@
 ﻿using FreeAMP.Core.Music;
+using FreeAMP.Core.Youtube;
 using FreeAMP.Resources;
+using FreeAMP.Views;
 using System;
+using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +12,7 @@ using Wpf.Ui.Controls;
 
 namespace FreeAMP
 {
+    [SupportedOSPlatform("windows")]
     public partial class MainWindow : FluentWindow
     {
         private readonly LocalPlayer _player = new();
@@ -18,27 +22,65 @@ namespace FreeAMP
         {
             InitializeComponent();
 
-            Finder.LoadMusic(Finder.AllowedExts);
-            TracksListView.ItemsSource = Finder.Tracks;
+            MainContent.Content = new LibraryView();
 
             _timer.Interval = TimeSpan.FromMilliseconds(500);
             _timer.Tick += Timer_Tick;
             _timer.Start();
         }
 
-        private void TracksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LibraryButton_Click(object sender, RoutedEventArgs e)
         {
-            if (TracksListView.SelectedItem is not Track selectedTrack)
-                return;
+            MainContent.Content = new LibraryView();
+        }
 
-            _player.Play(selectedTrack.Path);
+        private void YoutubeButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new YouTubeView();
+        }
 
-            NowPlayingTitleText.Text = selectedTrack.Title;
+        private void PlaylistsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new PlaylistsView();
+        }
+
+        private void AlbumsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new AlbumsView();
+        }
+
+        private void ArtistsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new ArtistsView();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new SettingsView();
+        }
+
+        public void PlayYoutube(string title, string author, string streamUrl)
+        {
+            _player.Play(streamUrl);
+
+            NowPlayingTitleText.Text = title;
+            NowPlayingArtistText.Text = author;
+
+            DurationText.Text = "0:00";
+            CurrentTimeText.Text = "0:00";
+            ProgressSlider.Value = 0;
+        }
+
+        public void PlayTrack(Track track)
+        {
+            _player.Play(track.Path);
+
+            NowPlayingTitleText.Text = track.Title;
 
             NowPlayingArtistText.Text =
-                string.IsNullOrWhiteSpace(selectedTrack.Artist)
+                string.IsNullOrWhiteSpace(track.Artist)
                     ? Strings.UnknownArtist
-                    : selectedTrack.Artist;
+                    : track.Artist;
 
             DurationText.Text = "0:00";
             CurrentTimeText.Text = "0:00";
@@ -72,20 +114,11 @@ namespace FreeAMP
             DurationText.Text = _player.Duration.ToString(@"m\:ss");
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsOverlay.Visibility = Visibility.Visible;
-        }
-
-        private void CloseSettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsOverlay.Visibility = Visibility.Collapsed;
-        }
-
         protected override void OnClosed(EventArgs e)
         {
             _timer.Stop();
             _player.Dispose();
+
             base.OnClosed(e);
         }
     }

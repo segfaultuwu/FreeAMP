@@ -27,7 +27,6 @@
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.3.0" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />
-    <PackageReference Include="YoutubeExplode" Version="6.6.0" />
   </ItemGroup>
 
 </Project>

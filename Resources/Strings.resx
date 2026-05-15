@@ -162,4 +162,28 @@
   <data name="DurationColumn" xml:space="preserve">
     <value>Duration</value>
   </data>
+  <data name="SelectedTrack" xml:space="preserve">
+    <value>Selected track</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="MusicFolder" xml:space="preserve">
+    <value>Music folder</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="YouTubeSearch" xml:space="preserve">
+    <value>YouTube Search</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search for music...</value>
+  </data>
 </root>
